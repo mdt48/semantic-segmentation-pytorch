@@ -1,0 +1,41 @@
+DATASET:
+  imgMaxSize: 1000
+  imgSizes: (300, 375, 450, 525, 600)
+  list_train: ./data/training_hotels.odgt
+  list_val: ./data/validation_hotels.odgt
+  num_class: 38
+  padding_constant: 8
+  random_flip: True
+  root_dataset: 
+  segm_downsampling_rate: 8
+DIR: ./hotels-resnet50dilated-ppm_deepsup
+MODEL:
+  arch_decoder: ppm_deepsup
+  arch_encoder: resnet50dilated
+  fc_dim: 2048
+  weights_decoder: 
+  weights_encoder: 
+TEST:
+  batch_size: 1
+  checkpoint: epoch_20.pth
+  result: ./Results/Resnet50
+TRAIN:
+  batch_size_per_gpu: 2
+  beta1: 0.9
+  deep_sup_scale: 0.4
+  disp_iter: 20
+  epoch_iters: 5000
+  fix_bn: False
+  lr_decoder: 0.02
+  lr_encoder: 0.02
+  lr_pow: 0.9
+  num_epoch: 20
+  optim: SGD
+  seed: 304
+  start_epoch: 0
+  weight_decay: 0.0001
+  workers: 16
+VAL:
+  batch_size: 1
+  checkpoint: epoch_20.pth
+  visualize: False
