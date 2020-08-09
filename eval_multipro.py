@@ -19,16 +19,15 @@ from lib.utils import as_numpy
 from PIL import Image
 from tqdm import tqdm
 
-colors = loadmat('data/color150.mat')['colors']
-# import pickle
-# # col = getColors()
-# colors = []
+# colors = loadmat('data/color150.mat')['colors']
+import pickle
+# col = getColors()
+colors = []
 # names = {}
-# with open("colors_only_hotels.pickle", "rb") as p:
-#     data = pickle.load(p)
-#     for d in data:
-#         colors.append(np.array(data[d][1], np.uint8))
-#         names[d] = data[d][0]
+with open("colors_adjusted.pckl", "rb") as p:
+    data = pickle.load(p)
+    for d in data:
+        colors.append(np.array(d[1], np.uint8))
 
 def visualize_result(data, pred, dir_result):
     (img, seg, info) = data

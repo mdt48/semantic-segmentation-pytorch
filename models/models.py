@@ -153,8 +153,14 @@ class ModelBuilder:
         net_decoder.apply(ModelBuilder.weights_init)
         if len(weights) > 0:
             print('Loading weights for net_decoder')
-            net_decoder.load_state_dict(
-                torch.load(weights, map_location=lambda storage, loc: storage), strict=False)
+            # m = torch.load(weights, map_location=lambda storage, loc: storage)
+            # m['conv_last.4.weight'] = m['conv_last.4.weight'].narrow(0,0,37)
+            # m['conv_last.4.bias'] = m['conv_last.4.bias'].narrow(0,0,37)
+            # m['conv_last_deepsup.weight'] = m['conv_last_deepsup.weight'].narrow(0,0,37)
+            # m['conv_last_deepsup.bias'] = m['conv_last_deepsup.bias'].narrow(0,0,37)
+            # net_decoder.load_state_dict(m, strict=False)
+            net_decoder.load_state_dict(torch.load(weights, map_location=lambda storage, loc: storage), strict=False)
+
         return net_decoder
 
 

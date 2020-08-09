@@ -190,6 +190,8 @@ def resnet50(pretrained=False, **kwargs):
     model = ResNet(Bottleneck, [3, 4, 6, 3], **kwargs)
     if True:
         model.load_state_dict(load_url(model_urls['resnet50']), strict=False)
+
+        # model.load_state_dict(load_url("http://sceneparsing.csail.mit.edu/model/pytorch/ade20k-resnet50dilated-ppm_deepsup/encoder_epoch_20.pth"), strict=False)
     return model
 
 def resnet101(pretrained=False, **kwargs):
