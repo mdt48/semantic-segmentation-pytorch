@@ -2,7 +2,7 @@ DATASET:
   root_dataset: ""
   list_train: "./data/training_hotels_ade_expanded.odgt"
   list_val: "./data/validation_hotels_only_expanded.odgt"
-  num_class: 186
+  num_class: 162
   imgSizes: (300, 375, 450, 525, 600)
   imgMaxSize: 1000
   padding_constant: 8

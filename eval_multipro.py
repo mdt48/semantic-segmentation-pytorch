@@ -24,10 +24,10 @@ import pickle
 # col = getColors()
 colors = []
 # names = {}
-with open("colors_adjusted.pckl", "rb") as p:
+with open("adjusted_colors.pckl", "rb") as p:
     data = pickle.load(p)
     for d in data:
-        colors.append(np.array(d[1], np.uint8))
+        colors.append(np.array(d, np.uint8))
 
 def visualize_result(data, pred, dir_result):
     (img, seg, info) = data

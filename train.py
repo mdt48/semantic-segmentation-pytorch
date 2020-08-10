@@ -141,16 +141,27 @@ def adjust_learning_rate(optimizers, cur_iter, cfg):
 
 def main(cfg, gpus):
     # Network Builders
+    # net_encoder = ModelBuilder.build_encoder(
+    #     arch=cfg.MODEL.arch_encoder.lower(),
+    #     fc_dim=cfg.MODEL.fc_dim,
+    #     weights=cfg.MODEL.weights_encoder)
+
     net_encoder = ModelBuilder.build_encoder(
         arch=cfg.MODEL.arch_encoder.lower(),
         fc_dim=cfg.MODEL.fc_dim,
-        weights=cfg.MODEL.weights_encoder)
+        weights="encoder_epoch_20.pth")
+
+    # net_decoder = ModelBuilder.build_decoder(
+    #     arch=cfg.MODEL.arch_decoder.lower(),
+    #     fc_dim=cfg.MODEL.fc_dim,
+    #     num_class=cfg.DATASET.num_class,
+    #     weights=cfg.MODEL.weights_decoder)
+    
     net_decoder = ModelBuilder.build_decoder(
         arch=cfg.MODEL.arch_decoder.lower(),
         fc_dim=cfg.MODEL.fc_dim,
         num_class=cfg.DATASET.num_class,
-        weights=cfg.MODEL.weights_decoder)
-    
+        weights="decoder_epoch_20.pth")
     crit = nn.NLLLoss(ignore_index=-1)
 
     if cfg.MODEL.arch_decoder.endswith('deepsup'):

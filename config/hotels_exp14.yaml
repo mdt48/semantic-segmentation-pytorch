@@ -1,7 +1,7 @@
 DATASET:
-  root_dataset: "/pless_nfs/home/mdt_/semantic-segmentation-pytorch/data"
-  list_train: "./data/training.odgt"
-  list_val: "./data/validation.odgt"
+  root_dataset: ""
+  list_train: "./data/training_hotels_ade.odgt"
+  list_val: "./data/exp13.odgt"
   num_class: 150
   imgSizes: (300, 375, 450, 525, 600)
   imgMaxSize: 1000
@@ -18,10 +18,10 @@ TRAIN:
   batch_size_per_gpu: 2
   num_epoch: 20
   start_epoch: 0
-  epoch_iters: 5000
+  epoch_iters: 1048
   optim: "SGD"
   lr_encoder: 0.02
-  lr_decoder: 0.02
+  lr_decoder: 0.02  
   lr_pow: 0.9
   beta1: 0.9
   weight_decay: 1e-4
@@ -37,6 +37,6 @@ VAL:
 
 TEST:
   checkpoint: "epoch_20.pth"
-  result: "./Results/AnnotatedHotels"
+  result: "./Results/exp14/"
 
-DIR: "./ade20k-resnet50dilated-ppm_deepsup"
+DIR: "ckpt/hotels_ADE-resnet50dilated-ppm_deepsup-exp14"

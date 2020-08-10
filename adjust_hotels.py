@@ -78,7 +78,7 @@ def main(args):
         fix_pictures(new_colors)
     elif args.c:
         print("Creating color file...")
-        new_colors_file(max(new_colors.keys()))
+        new_colors_file(max(new_colors.values()))
     else:
         print("invalid")
 
