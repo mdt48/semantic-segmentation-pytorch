@@ -149,7 +149,7 @@ def main(cfg, gpus):
     net_encoder = ModelBuilder.build_encoder(
         arch=cfg.MODEL.arch_encoder.lower(),
         fc_dim=cfg.MODEL.fc_dim,
-        weights="encoder_epoch_20.pth")
+        weights="pretrained/encoder_epoch_20.pth")
 
     # net_decoder = ModelBuilder.build_decoder(
     #     arch=cfg.MODEL.arch_decoder.lower(),
@@ -161,7 +161,7 @@ def main(cfg, gpus):
         arch=cfg.MODEL.arch_decoder.lower(),
         fc_dim=cfg.MODEL.fc_dim,
         num_class=cfg.DATASET.num_class,
-        weights="decoder_epoch_20.pth")
+        weights="pretrained/decoder_epoch_20.pth")
 
     for param in net_encoder.parameters():
         param.requires_grad=False
