@@ -24,7 +24,7 @@ import pickle
 # col = getColors()
 colors = []
 # names = {}
-with open("adjusted_colors.pckl", "rb") as p:
+with open("Colors/adjusted_colors.pckl", "rb") as p:
     data = pickle.load(p)
     for d in data:
         colors.append(np.array(d, np.uint8))

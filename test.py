@@ -37,12 +37,11 @@ import pickle
 # col = getColors()
 colors = []
 names = {}
-with open("colors.pickle", "rb") as p:
+with open("Colors/colors_exp15-18.pckl", "rb") as p:
     data = pickle.load(p)
-    for d in data:
-        colors.append(np.array(data[d][1], np.uint8))
-        names[d] = data[d][0]
-
+    for idx, d in enumerate(data):
+        colors.append(np.array(d[0], np.uint8))
+        names[idx+1] = d[1]
 def visualize_result(data, pred, cfg):
     (img, info) = data
 
