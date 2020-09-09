@@ -15,6 +15,10 @@ from models import ModelBuilder, SegmentationModule
 from utils import AverageMeter, parse_devices, setup_logger
 from lib.nn import UserScatteredDataParallel, user_scattered_collate, patch_replication_callback
 
+from torch.utils.tensorboard import SummaryWriter
+
+
+writer = SummaryWriter()
 
 # train one epoch
 def train(segmentation_module, iterator, optimizers, history, epoch, cfg):
@@ -66,9 +70,14 @@ def train(segmentation_module, iterator, optimizers, history, epoch, cfg):
                           ave_acc.average(), ave_total_loss.average()))
 
             fractional_epoch = epoch - 1 + 1. * i / cfg.TRAIN.epoch_iters
+
+            writer.add_scalar('Loss/Train Curr Epoch', ave_total_loss.average(), i)
+            writer.add_scalar('Accuracy/Train Curr Epoch',ave_acc.average(), i)
+
             history['train']['epoch'].append(fractional_epoch)
             history['train']['loss'].append(loss.data.item())
             history['train']['acc'].append(acc.data.item())
+
 
 
 def checkpoint(nets, history, cfg, epoch):
@@ -163,9 +172,16 @@ def main(cfg, gpus):
         num_class=cfg.DATASET.num_class,
         weights="pretrained/decoder_epoch_20.pth")
 
-    for param in net_encoder.parameters():
-        param.requires_grad=False
-        
+    ct = 0
+    # for child in net_encoder.children():
+    #     ct+= 1
+    #     if ct < 12:
+    # for parameter in net_encoder.layer1.parameters():
+    #     parameter.requires_grad = False
+    # for parameter in net_encoder.layer2.parameters():
+    #     parameter.requires_grad = False
+    # for parameter in net_encoder.parameters():
+    #     parameter.requires_grad = False;
     crit = nn.NLLLoss(ignore_index=-1)
 
     if cfg.MODEL.arch_decoder.endswith('deepsup'):
@@ -210,13 +226,17 @@ def main(cfg, gpus):
 
     # Main loop
     history = {'train': {'epoch': [], 'loss': [], 'acc': []}}
-
+    
+    
     for epoch in range(cfg.TRAIN.start_epoch, cfg.TRAIN.num_epoch):
         train(segmentation_module, iterator_train, optimizers, history, epoch+1, cfg)
-
+        n = ((int(cfg.TRAIN.epoch_iters) // 20 ) * epoch)  + 1
+        for i in zip(history['train']['loss'][n:], history['train']['acc'][n:]):
+            writer.add_scalar('Loss/Train', i[0], epoch)
+            writer.add_scalar('Accuracy/Train', i[1], epoch)
         # checkpointing
         checkpoint(nets, history, cfg, epoch+1)
-
+    writer.close()
     print('Training Done!')
 
 

@@ -241,6 +241,7 @@ class ResnetDilated(nn.Module):
         self.layer2 = orig_resnet.layer2
         self.layer3 = orig_resnet.layer3
         self.layer4 = orig_resnet.layer4
+        # self.fc = orig_resnet.fc
 
     def _nostride_dilate(self, m, dilate):
         classname = m.__class__.__name__
@@ -415,7 +416,7 @@ class PPM(nn.Module):
             BatchNorm2d(512),
             nn.ReLU(inplace=True),
             nn.Dropout2d(0.1),
-            nn.Conv2d(512, num_class, kernel_size=1)
+            nn.Conv2d(512, 36, kernel_size=1)
         )
 
     def forward(self, conv_out, segSize=None):
