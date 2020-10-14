@@ -37,11 +37,12 @@ import pickle
 # col = getColors()
 colors = []
 names = {}
-with open("Colors/colors_exp15-18.pckl", "rb") as p:
+with open("Colors/colors_Hotels_and_ADE_162.pckl", "rb") as p:
     data = pickle.load(p)
     for idx, d in enumerate(data):
-        colors.append(np.array(d[0], np.uint8))
-        names[idx+1] = d[1]
+        # colors.append(np.array(d[0], np.uint8))
+        names[idx+1] = d
+    colors = np.array(data, np.uint8)
 def visualize_result(data, pred, cfg):
     (img, info) = data
 
@@ -77,6 +78,16 @@ def test(segmentation_module, loader, gpu):
         segSize = (batch_data['img_ori'].shape[0],
                    batch_data['img_ori'].shape[1])
         img_resized_list = batch_data['img_data']
+
+        import os
+        import features
+        chain = batch_data['info'].split("/")[7]
+        img = batch_data['info'].split("/")[-1].split(".")[0]
+        path = os.path.join("features", chain, img)
+
+        features.path = path;
+        if not os.path.exists(path):
+            os.makedirs(path)
 
         with torch.no_grad():
             scores = torch.zeros(1, cfg.DATASET.num_class, segSize[0], segSize[1])

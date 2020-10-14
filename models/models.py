@@ -3,6 +3,7 @@ import torch.nn as nn
 import torchvision
 from . import resnet, resnext, mobilenet, hrnet
 from lib.nn import SynchronizedBatchNorm2d
+import features
 BatchNorm2d = SynchronizedBatchNorm2d
 
 
@@ -154,10 +155,10 @@ class ModelBuilder:
         if len(weights) > 0:
             print('Loading weights for net_decoder')
             # m = torch.load(weights, map_location=lambda storage, loc: storage)
-            # m['conv_last.4.weight'] = m['conv_last.4.weight'].narrow(0,0,37)
-            # m['conv_last.4.bias'] = m['conv_last.4.bias'].narrow(0,0,37)
-            # m['conv_last_deepsup.weight'] = m['conv_last_deepsup.weight'].narrow(0,0,37)
-            # m['conv_last_deepsup.bias'] = m['conv_last_deepsup.bias'].narrow(0,0,37)
+            # m['conv_last.4.weight'] = m['conv_last.4.weight'].narrow(0,0,36)
+            # m['conv_last.4.bias'] = m['conv_last.4.bias'].narrow(0,0,36)
+            # m['conv_last_deepsup.weight'] = m['conv_last_deepsup.weight'].narrow(0,0,36)
+            # m['conv_last_deepsup.bias'] = m['conv_last_deepsup.bias'].narrow(0,0,36)
             # net_decoder.load_state_dict(m, strict=False)
             net_decoder.load_state_dict(torch.load(weights, map_location=lambda storage, loc: storage), strict=False)
 
@@ -241,6 +242,7 @@ class ResnetDilated(nn.Module):
         self.layer2 = orig_resnet.layer2
         self.layer3 = orig_resnet.layer3
         self.layer4 = orig_resnet.layer4
+        # self.fc = orig_resnet.fc
 
     def _nostride_dilate(self, m, dilate):
         classname = m.__class__.__name__
@@ -269,6 +271,9 @@ class ResnetDilated(nn.Module):
         x = self.layer2(x); conv_out.append(x);
         x = self.layer3(x); conv_out.append(x);
         x = self.layer4(x); conv_out.append(x);
+
+        # [1, 2048, m, n]
+        torch.save(x, features.path+"/2048-features.pt")
 
         if return_feature_maps:
             return conv_out
@@ -415,7 +420,7 @@ class PPM(nn.Module):
             BatchNorm2d(512),
             nn.ReLU(inplace=True),
             nn.Dropout2d(0.1),
-            nn.Conv2d(512, num_class, kernel_size=1)
+            nn.Conv2d(512, 36, kernel_size=1)
         )
 
     def forward(self, conv_out, segSize=None):
@@ -443,7 +448,7 @@ class PPM(nn.Module):
 
 # pyramid pooling, deep supervision
 class PPMDeepsup(nn.Module):
-    def __init__(self, num_class=150, fc_dim=4096,
+    def __init__(self, num_class=36, fc_dim=4096,
                  use_softmax=False, pool_scales=(1, 2, 3, 6)):
         super(PPMDeepsup, self).__init__()
         self.use_softmax = use_softmax
@@ -488,6 +493,11 @@ class PPMDeepsup(nn.Module):
             x = nn.functional.interpolate(
                 x, size=segSize, mode='bilinear', align_corners=False)
             x = nn.functional.softmax(x, dim=1)
+            # y = x.squeeze(); y = y.permute(2,1,0)
+
+            
+            # x = [1,162,full height, full width]
+            torch.save(x, features.path+"/162-features.pt")
             return x
 
         # deep sup

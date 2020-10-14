@@ -18,7 +18,7 @@ TRAIN:
   batch_size_per_gpu: 2
   num_epoch: 20
   start_epoch: 0
-  epoch_iters: 1048
+  epoch_iters: 131
   optim: "SGD"
   lr_encoder: 0.02
   lr_decoder: 0.02  
@@ -37,6 +37,6 @@ VAL:
 
 TEST:
   checkpoint: "epoch_20.pth"
-  result: "./Results/exp15/"
+  result: "./Results/exp18/"
 
-DIR: "ckpt/hotels_ADE-resnet50dilated-ppm_deepsup-exp15"
+DIR: "ckpt/hotels_ADE-resnet50dilated-ppm_deepsup-exp18"

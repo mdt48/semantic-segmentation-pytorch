@@ -55,13 +55,13 @@ def match(hotels, ade):
     return new_colors
 
 def fix_pictures(new_colors):
-    imgs = [f for f in glob("/pless_nfs/home/mdt_/semantic-segmentation-pytorch/HotelsData/*.png")]
+    imgs = [f for f in glob("/pless_nfs/home/mdt_/semantic-segmentation-pytorch/imgs/HotelsData/*.png")]
     
     for img in tqdm(imgs, desc='Adjusting Hotels'):
         op = io.imread(img)
         for nc in new_colors.keys():
             op[op == nc] = new_colors[nc]
-        io.imsave(os.path.join("HotelsAdjusted", os.path.basename(img)), op)
+        io.imsave(os.path.join("imgs/Hotels150", os.path.basename(img)), op)
 
 def new_colors_file(x):
     l = [i for i in range(1,x+1)]
@@ -89,9 +89,9 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("-a", help="adjust hotels to match ADE labels", action='store_true')
-    parser.add_argument("-c", help="create colors", action='store_true')
-    parser.add_argument("-o", help="create odgt files", action='store_true')
+    # parser.add_argument("-a", help="adjust hotels to match ADE labels", action='store_true')
+    # parser.add_argument("-c", help="create colors", action='store_true')
+    # parser.add_argument("-o", help="create odgt files", action='store_true')
 
     args = parser.parse_args()
 

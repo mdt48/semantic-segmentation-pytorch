@@ -1,0 +1,5 @@
+sky
+tree
+road;route
+grass
+sidewalk;pavement
